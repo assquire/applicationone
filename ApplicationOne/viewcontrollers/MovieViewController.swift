@@ -10,7 +10,7 @@ import UIKit
 final class MovieViewController: UIViewController {
     
     var apiCaller = APICaller()
-    var movieList: [MovieModel] = []
+    var allMoviesList: [[MovieModel]] = []
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -53,6 +53,9 @@ final class MovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        apiCaller.delegate = self
+        apiCaller.fetchRequest()
+        
         view.backgroundColor = .systemBackground
         
         categoryCollectionView.dataSource = self
@@ -61,9 +64,6 @@ final class MovieViewController: UIViewController {
         trendingCollectionView.delegate = self
         categoryTableView.dataSource = self
         categoryTableView.delegate = self
-        apiCaller.delegate = self
-        
-        apiCaller.fetchRequest()
         
         setupViews()
         setupConstraints()
@@ -75,7 +75,12 @@ final class MovieViewController: UIViewController {
 extension MovieViewController: APICallerDelegate {
     
     func didUpdateMovieList(with movieList: [MovieModel]) {
-        self.movieList.append(contentsOf: movieList)
+        self.allMoviesList.append(movieList)
+        DispatchQueue.main.async {
+            self.categoryCollectionView.reloadData()
+            self.trendingCollectionView.reloadData()
+            self.categoryTableView.reloadData()
+        }
     }
     
     func didFailWithError(_ error: Error) {
@@ -91,7 +96,10 @@ extension MovieViewController: UICollectionViewDataSource {
         if collectionView == categoryCollectionView {
             return categoryList.count
         }
-        return movieList.count
+        if allMoviesList.isEmpty {
+            return 0
+        }
+        return allMoviesList[0].count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -105,7 +113,7 @@ extension MovieViewController: UICollectionViewDataSource {
             return cell
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Identifiers.trendingCollectionViewCell, for: indexPath) as! TrendingCollectionViewCell
-        cell.configure(with: movieList[indexPath.item].backdropPath)
+        cell.configure(with: allMoviesList[0][indexPath.item].backdropPath)
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
         return cell
@@ -141,7 +149,7 @@ extension MovieViewController: UICollectionViewDelegateFlowLayout {
 extension MovieViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return categoryList.count - 1
+        return categoryList.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -150,14 +158,18 @@ extension MovieViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = SectionHeaderView()
-        let title = String(categoryList[section + 1].rawValue.dropFirst())
+        let title = String(categoryList[section].rawValue.dropFirst())
         view.configure(with: title, number: 6)
         return view
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Identifiers.categoryTableViewCell, for: indexPath) as! CategoryTableViewCell
-        return cell
+        if allMoviesList.count == Constants.Values.urlList.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Identifiers.categoryTableViewCell, for: indexPath) as! CategoryTableViewCell
+            cell.configure(with: allMoviesList[indexPath.section + 1])
+            return cell
+        }
+        return UITableViewCell()
     }
 }
 
@@ -210,7 +222,7 @@ private extension MovieViewController {
         }
         categoryTableView.snp.makeConstraints { make in
             make.top.equalTo(trendingCollectionView.snp.bottom).offset(10)
-            make.height.equalTo(view).multipliedBy(1.2)
+            make.height.equalTo(view).multipliedBy(1.6)
             make.leading.trailing.bottom.equalToSuperview()
         }
     }

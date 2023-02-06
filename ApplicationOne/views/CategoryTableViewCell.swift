@@ -9,6 +9,8 @@ import UIKit
 
 final class CategoryTableViewCell: UITableViewCell {
     
+    private var movieList: [MovieModel] = []
+    
     private lazy var movieCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -32,6 +34,12 @@ final class CategoryTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(with movieList: [MovieModel]) {
+        self.movieList = movieList
+        DispatchQueue.main.async {
+            self.movieCollectionView.reloadData()
+        }
+    }
 }
 
 //MARK: - Collection view data source and delegate methods
@@ -39,12 +47,13 @@ final class CategoryTableViewCell: UITableViewCell {
 extension CategoryTableViewCell: UICollectionViewDataSource {
    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return movieList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Identifiers.movieCollectionViewCell, for: indexPath) as! MovieCollectionViewCell
         cell.clipsToBounds = true
+        cell.configure(with: movieList[indexPath.row])
         return cell
     }
 }
