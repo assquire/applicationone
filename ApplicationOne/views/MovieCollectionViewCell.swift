@@ -9,6 +9,8 @@ import UIKit
 
 final class MovieCollectionViewCell: UICollectionViewCell {
     
+    private var genreList: [Int:String] = [:]
+    
     private let wholeView = UIView()
     
     private lazy var posterImageView: UIImageView = {
@@ -32,11 +34,10 @@ final class MovieCollectionViewCell: UICollectionViewCell {
     
     private lazy var genresLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 2
-        label.lineBreakMode = .byWordWrapping
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.2
         label.textColor = .systemGray2
-        label.text = "sci-fi, thriller, comedy"
         return label
     }()
     
@@ -51,13 +52,17 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with model: MovieModel) {
+    func configure(with model: MovieModel, and genreList: [Int:String]) {
+        self.genreList = genreList
+        var stringGenreList: [String] = []
+        for i in 0..<model.genreIds.count {
+            stringGenreList.append(genreList[model.genreIds[i]] ?? "")
+        }
         guard let url = URL(string: "\(Constants.Links.image)\(model.posterPath)") else { fatalError("Incorrect link to poster path!")}
-        let stringGenres = model.genreIds.map { String($0) }
         DispatchQueue.main.async {
             self.posterImageView.kf.setImage(with: url)
             self.movieNameLabel.text = model.title
-            self.genresLabel.text = stringGenres.joined(separator: ", ")
+            self.genresLabel.text = stringGenreList.joined(separator: ", ")
         }
     }
 }

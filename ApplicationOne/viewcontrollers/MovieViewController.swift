@@ -11,6 +11,7 @@ final class MovieViewController: UIViewController {
     
     var apiCaller = APICaller()
     var allMoviesList: [[MovieModel]] = []
+    var genreList: [Int:String] = [:]
     
     private let scrollView = UIScrollView()
     private let contentView = UIView()
@@ -54,7 +55,8 @@ final class MovieViewController: UIViewController {
         super.viewDidLoad()
         
         apiCaller.delegate = self
-        apiCaller.fetchRequest()
+        apiCaller.fetchRequest(.genre)
+        apiCaller.fetchRequest(.movie)
         
         view.backgroundColor = .systemBackground
         
@@ -74,10 +76,17 @@ final class MovieViewController: UIViewController {
 
 extension MovieViewController: APICallerDelegate {
     
-    func didUpdateMovieList(with movieList: [MovieModel]) {
+    func didUpdateAllMovieList(with movieList: [MovieModel]) {
         self.allMoviesList.append(movieList)
         DispatchQueue.main.async {
-            self.categoryCollectionView.reloadData()
+            self.trendingCollectionView.reloadData()
+            self.categoryTableView.reloadData()
+        }
+    }
+    
+    func didUpdateGenreList(with genreList: [Int : String]) {
+        self.genreList = genreList
+        DispatchQueue.main.async {
             self.trendingCollectionView.reloadData()
             self.categoryTableView.reloadData()
         }
@@ -170,7 +179,7 @@ extension MovieViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Identifiers.categoryTableViewCell, for: indexPath) as! CategoryTableViewCell
             cell.apiCaller = apiCaller
             cell.navigationController = navigationController
-            cell.configure(with: allMoviesList[indexPath.section + 1])
+            cell.configure(with: allMoviesList[indexPath.section + 1], and: genreList)
             return cell
         }
         return UITableViewCell()

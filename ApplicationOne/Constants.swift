@@ -42,8 +42,6 @@ struct Constants {
         static let topRated = "\(Links.api)movie/top_rated?api_key=\(Keys.api)"
         static let upcoming = "\(Links.api)movie/upcoming?api_key=\(Keys.api)"
     }
-    
-// https://api.themoviedb.org/3/movie/now_playing?api_key=b546d4933841b9453fa9ccabe482d1a8&language=en-US&page=1
 }
 
 enum Category: String, CaseIterable {
@@ -51,4 +49,8 @@ enum Category: String, CaseIterable {
     case popular = "🎥Popular"
     case topRated = "📺Top Rated"
     case upcoming = "🍿Upcoming"
+}
+
+enum RequestType {
+    case movie, genre
 }

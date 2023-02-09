@@ -8,39 +8,42 @@
 import Foundation
 
 protocol APICallerDelegate {
-    func didUpdateMovieList(with movieList: [MovieModel])
+    func didUpdateAllMovieList(with movieList: [MovieModel])
+    func didUpdateGenreList(with genreList: [Int:String])
     func didUpdateDetailedModel(with model: DetailedMovieModel)
     func didFailWithError(_ error: Error)
-}
-
-extension APICallerDelegate {
-    
-    func didUpdateMovieList(with movieList: [MovieModel]) {
-        print("Default implementation!")
-    }
-    
-    func didUpdateDetailedModel(with model: DetailedMovieModel) {
-        print("Default implementation!")
-    }
-    
-    func didFailWithError(_ error: Error) {
-        print("Failer with error: ", error)
-    }
 }
 
 struct APICaller {
     
     var delegate: APICallerDelegate?
+    private var genreList: [Int:String] = [:]
     
-    func fetchRequest() {
-        for urlString in Constants.Values.urlList {
-            guard let url = URL(string: urlString) else { fatalError("Incorrect link!") }
-            let task = URLSession.shared.dataTask(with: url) { data, _ , error in
-                if let data, error == nil {
-                    if let movieList = parseMovieJSON(data) {
-                        delegate?.didUpdateMovieList(with: movieList)
+    func fetchRequest(_ type: RequestType) {
+        switch type {
+        case .movie:
+            for urlString in Constants.Values.urlList {
+                guard let url = URL(string: urlString) else { fatalError("Incorrect link!") }
+                let task = URLSession.shared.dataTask(with: url) { data, _ , error in
+                    if let data, error == nil {
+                        if let movieList = parseMovieJSON(data) {
+                            delegate?.didUpdateAllMovieList(with: movieList)
+                        } else {
+                            delegate?.didFailWithError(error!)
+                        }
                     } else {
                         delegate?.didFailWithError(error!)
+                    }
+                }
+                task.resume()
+            }
+        case .genre:
+            let urlString = "\(Constants.Links.api)genre/movie/list?api_key=\(Constants.Keys.api)"
+            guard let url = URL(string: urlString) else { fatalError("Incorrect link!") }
+            let task = URLSession.shared.dataTask(with: url) { data, _, error in
+                if let data, error == nil {
+                    if let genreList = parseGenreJSON(data) {
+                        delegate?.didUpdateGenreList(with: genreList)
                     }
                 } else {
                     delegate?.didFailWithError(error!)
@@ -55,10 +58,8 @@ struct APICaller {
         guard let url = URL(string: urlString) else { fatalError("Incorrect link with movie id!") }
         let task = URLSession.shared.dataTask(with: url) { data, _, error in
             if let data, error == nil {
-                if let model = parseDetailedMovieJSON(data), error == nil {
+                if let model = parseDetailedMovieJSON(data) {
                     delegate?.didUpdateDetailedModel(with: model)
-                } else {
-                    delegate?.didFailWithError(error!)
                 }
             } else {
                 delegate?.didFailWithError(error!)
@@ -107,5 +108,24 @@ struct APICaller {
             print(error)
             return nil
         }
+    }
+}
+
+extension APICallerDelegate {
+    
+    func didUpdateAllMovieList(with movieList: [MovieModel]) {
+        print("Default implementation!")
+    }
+    
+    func didUpdateGenreList(with genreList: [Int:String]) {
+        print("Default implementation!")
+    }
+    
+    func didUpdateDetailedModel(with model: DetailedMovieModel) {
+        print("Default implementation!")
+    }
+    
+    func didFailWithError(_ error: Error) {
+        print("Failer with error: ", error)
     }
 }
