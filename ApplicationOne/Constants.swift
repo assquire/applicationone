@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Constants {
     
@@ -21,6 +22,7 @@ struct Constants {
     }
     
     struct Values {
+        static let screenHeight = UIScreen.main.bounds.height
         static let urlList = [URLs.trending, URLs.nowPlaying, URLs.popular, URLs.topRated, URLs.upcoming]
     }
     

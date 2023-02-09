@@ -12,6 +12,11 @@
 		379925FE299142C000008553 /* GenreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379925FD299142C000008553 /* GenreData.swift */; };
 		37A09A102987FBA900060358 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A09A0F2987FBA900060358 /* MovieCollectionViewCell.swift */; };
 		37A09A1329880B2100060358 /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A09A1229880B2100060358 /* APICaller.swift */; };
+		37B90C6429928651007D74DD /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B90C6329928651007D74DD /* DetailsViewController.swift */; };
+		37B90C662992881B007D74DD /* DetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B90C652992881B007D74DD /* DetailsHeaderView.swift */; };
+		37B90C6829928E7A007D74DD /* PosterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B90C6729928E7A007D74DD /* PosterTableViewCell.swift */; };
+		37B90C6A2992951B007D74DD /* DetailedMovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B90C692992951B007D74DD /* DetailedMovieModel.swift */; };
+		37B90C6C29929527007D74DD /* DetailedMovieData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B90C6B29929527007D74DD /* DetailedMovieData.swift */; };
 		37DD73EF29801142004E3F41 /* TrendingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DD73EE29801142004E3F41 /* TrendingCollectionViewCell.swift */; };
 		37DD73F12980186F004E3F41 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DD73F02980186F004E3F41 /* CategoryTableViewCell.swift */; };
 		37DD73F329801C55004E3F41 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DD73F229801C55004E3F41 /* SectionHeaderView.swift */; };
@@ -35,6 +40,11 @@
 		379925FD299142C000008553 /* GenreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreData.swift; sourceTree = "<group>"; };
 		37A09A0F2987FBA900060358 /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
 		37A09A1229880B2100060358 /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
+		37B90C6329928651007D74DD /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		37B90C652992881B007D74DD /* DetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsHeaderView.swift; sourceTree = "<group>"; };
+		37B90C6729928E7A007D74DD /* PosterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterTableViewCell.swift; sourceTree = "<group>"; };
+		37B90C692992951B007D74DD /* DetailedMovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedMovieModel.swift; sourceTree = "<group>"; };
+		37B90C6B29929527007D74DD /* DetailedMovieData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedMovieData.swift; sourceTree = "<group>"; };
 		37DD73EE29801142004E3F41 /* TrendingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingCollectionViewCell.swift; sourceTree = "<group>"; };
 		37DD73F02980186F004E3F41 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 		37DD73F229801C55004E3F41 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
@@ -75,6 +85,8 @@
 				371DE04B29894EF800C47581 /* MovieData.swift */,
 				371DE04D298950DE00C47581 /* MovieModel.swift */,
 				379925FD299142C000008553 /* GenreData.swift */,
+				37B90C6B29929527007D74DD /* DetailedMovieData.swift */,
+				37B90C692992951B007D74DD /* DetailedMovieModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -87,6 +99,8 @@
 				37DD73F229801C55004E3F41 /* SectionHeaderView.swift */,
 				37DD73F02980186F004E3F41 /* CategoryTableViewCell.swift */,
 				37A09A0F2987FBA900060358 /* MovieCollectionViewCell.swift */,
+				37B90C652992881B007D74DD /* DetailsHeaderView.swift */,
+				37B90C6729928E7A007D74DD /* PosterTableViewCell.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -133,6 +147,7 @@
 				37EC4895297EC45E003B0DF6 /* PlaceViewController.swift */,
 				37EC4893297EC451003B0DF6 /* TicketViewController.swift */,
 				37EC4891297EC2D5003B0DF6 /* ProfileViewController.swift */,
+				37B90C6329928651007D74DD /* DetailsViewController.swift */,
 			);
 			path = viewcontrollers;
 			sourceTree = "<group>";
@@ -277,13 +292,18 @@
 				37EC4894297EC451003B0DF6 /* TicketViewController.swift in Sources */,
 				37EC4896297EC45E003B0DF6 /* PlaceViewController.swift in Sources */,
 				37EC4892297EC2D5003B0DF6 /* ProfileViewController.swift in Sources */,
+				37B90C662992881B007D74DD /* DetailsHeaderView.swift in Sources */,
 				37DD73F12980186F004E3F41 /* CategoryTableViewCell.swift in Sources */,
 				37DD73F329801C55004E3F41 /* SectionHeaderView.swift in Sources */,
+				37B90C6829928E7A007D74DD /* PosterTableViewCell.swift in Sources */,
+				37B90C6429928651007D74DD /* DetailsViewController.swift in Sources */,
 				37DD73EF29801142004E3F41 /* TrendingCollectionViewCell.swift in Sources */,
 				379925FE299142C000008553 /* GenreData.swift in Sources */,
 				371DE04E298950DE00C47581 /* MovieModel.swift in Sources */,
 				37DF74A62948C08F004B8EFD /* SceneDelegate.swift in Sources */,
+				37B90C6A2992951B007D74DD /* DetailedMovieModel.swift in Sources */,
 				37EC489A297ECE95003B0DF6 /* Constants.swift in Sources */,
+				37B90C6C29929527007D74DD /* DetailedMovieData.swift in Sources */,
 				37EC4890297EC2BF003B0DF6 /* MovieViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

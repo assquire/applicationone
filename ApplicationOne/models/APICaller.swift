@@ -9,7 +9,23 @@ import Foundation
 
 protocol APICallerDelegate {
     func didUpdateMovieList(with movieList: [MovieModel])
+    func didUpdateDetailedModel(with model: DetailedMovieModel)
     func didFailWithError(_ error: Error)
+}
+
+extension APICallerDelegate {
+    
+    func didUpdateMovieList(with movieList: [MovieModel]) {
+        print("Default implementation!")
+    }
+    
+    func didUpdateDetailedModel(with model: DetailedMovieModel) {
+        print("Default implementation!")
+    }
+    
+    func didFailWithError(_ error: Error) {
+        print("Failer with error: ", error)
+    }
 }
 
 struct APICaller {
@@ -32,6 +48,23 @@ struct APICaller {
             }
             task.resume()
         }
+    }
+    
+    func fetchRequest(with id: Int) {
+        let urlString = "\(Constants.Links.api)movie/\(id)?api_key=\(Constants.Keys.api)"
+        guard let url = URL(string: urlString) else { fatalError("Incorrect link with movie id!") }
+        let task = URLSession.shared.dataTask(with: url) { data, _, error in
+            if let data, error == nil {
+                if let model = parseDetailedMovieJSON(data), error == nil {
+                    delegate?.didUpdateDetailedModel(with: model)
+                } else {
+                    delegate?.didFailWithError(error!)
+                }
+            } else {
+                delegate?.didFailWithError(error!)
+            }
+        }
+        task.resume()
     }
     
     func parseMovieJSON(_ data: Data) -> [MovieModel]? {
@@ -65,4 +98,14 @@ struct APICaller {
         return genreList
     }
     
+    func parseDetailedMovieJSON(_ data: Data) -> DetailedMovieModel? {
+        do {
+            let decodedData = try JSONDecoder().decode(DetailedMovieData.self, from: data)
+            let model = DetailedMovieModel(posterPath: decodedData.poster_path,backdropPath: decodedData.backdrop_path, title: decodedData.title, tagline: decodedData.tagline, overview: decodedData.overview)
+            return model
+        } catch {
+            print(error)
+            return nil
+        }
+    }
 }

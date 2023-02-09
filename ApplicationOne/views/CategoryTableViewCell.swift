@@ -10,6 +10,8 @@ import UIKit
 final class CategoryTableViewCell: UITableViewCell {
     
     private var movieList: [MovieModel] = []
+    var apiCaller: APICaller?
+    var navigationController: UINavigationController?
     
     private lazy var movieCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -63,6 +65,15 @@ extension CategoryTableViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = collectionView.frame.size.height
         return CGSize(width: height/2, height: height)
+    }
+}
+
+extension CategoryTableViewCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = DetailsViewController()
+        vc.apiCaller = self.apiCaller
+        vc.configure(with: movieList[indexPath.item].id)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

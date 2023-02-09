@@ -82,10 +82,6 @@ extension MovieViewController: APICallerDelegate {
             self.categoryTableView.reloadData()
         }
     }
-    
-    func didFailWithError(_ error: Error) {
-        print("Failer with error: ", error)
-    }
 }
 
 //MARK: - Collection view data source methods
@@ -120,7 +116,7 @@ extension MovieViewController: UICollectionViewDataSource {
     }
 }
 
-//MARK: - Collection view delegate methods
+//MARK: - Collection view delegate flow methods
 
 extension MovieViewController: UICollectionViewDelegateFlowLayout {
     
@@ -136,13 +132,19 @@ extension MovieViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// TODO
-//extension MovieViewController: UICollectionViewDelegate {
-//
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        print("Hi!")
-//    }
-//}
+//MARK: - Collection view delegate methods
+
+extension MovieViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == trendingCollectionView {
+            let vc = DetailsViewController()
+            vc.apiCaller = self.apiCaller
+            vc.configure(with: allMoviesList[0][indexPath.item].id)
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+}
 
 //MARK: - Table view data source methods
 
@@ -166,6 +168,8 @@ extension MovieViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if allMoviesList.count == Constants.Values.urlList.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Identifiers.categoryTableViewCell, for: indexPath) as! CategoryTableViewCell
+            cell.apiCaller = apiCaller
+            cell.navigationController = navigationController
             cell.configure(with: allMoviesList[indexPath.section + 1])
             return cell
         }
